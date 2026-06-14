@@ -33,3 +33,6 @@ Thumbs.db
 outputs/*.png
 outputs/*.json
 !outputs/.gitkeep
+
+# logs
+outputs/*.log
