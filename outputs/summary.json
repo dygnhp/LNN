@@ -1,0 +1,48 @@
+{
+  "gates_ok": true,
+  "results": [
+    {
+      "demo": "D1",
+      "acc_reservoir": 0.40625,
+      "acc_opened": 1.0,
+      "improved": true,
+      "n_classes": 3
+    },
+    {
+      "demo": "D2",
+      "acc_reservoir": 0.12,
+      "acc_opened": 0.49333333333333335,
+      "improved": true,
+      "n_classes": 10
+    },
+    {
+      "demo": "D3",
+      "acc_reservoir": 0.0,
+      "acc_opened": 0.21875,
+      "improved": true,
+      "top5": [
+        "노래",
+        "그림",
+        "시",
+        "편지",
+        "차"
+      ],
+      "orth_before": 0.7809020280838013,
+      "orth_after": 0.9949650764465332,
+      "D": 8
+    },
+    {
+      "demo": "D4",
+      "mse_reservoir": 0.12381787598133087,
+      "mse_opened": 0.08409388363361359,
+      "improved": true,
+      "chars": [
+        "A",
+        "B",
+        "C",
+        "O",
+        "X"
+      ]
+    }
+  ]
+}

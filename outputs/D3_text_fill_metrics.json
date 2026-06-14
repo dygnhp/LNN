@@ -1,0 +1,16 @@
+{
+  "demo": "D3",
+  "acc_reservoir": 0.0,
+  "acc_opened": 0.21875,
+  "improved": true,
+  "top5": [
+    "노래",
+    "그림",
+    "시",
+    "편지",
+    "차"
+  ],
+  "orth_before": 0.7809020280838013,
+  "orth_after": 0.9949650764465332,
+  "D": 8
+}

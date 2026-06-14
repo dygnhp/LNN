@@ -1,4 +1,4 @@
 D3 fill-in-the-blank
-reservoir top1=0.156 opened top1=0.094
-[§11*] noun-code max cross-corr before=0.781 after=0.870
-'나는 ___를 쓴다' top-5 = ['그녀는', '그는', '쓴다', '<PAD>', '<BOS>']
+reservoir top1=0.000 opened top1=0.219
+[§11*] noun-code max cross-corr before=0.781 after=0.995
+'나는 ___를 쓴다' top-5 = ['노래', '그림', '시', '편지', '차']

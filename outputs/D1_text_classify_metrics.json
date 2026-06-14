@@ -1,0 +1,7 @@
+{
+  "demo": "D1",
+  "acc_reservoir": 0.40625,
+  "acc_opened": 1.0,
+  "improved": true,
+  "n_classes": 3
+}

@@ -1,0 +1,13 @@
+{
+  "demo": "D4",
+  "mse_reservoir": 0.12381787598133087,
+  "mse_opened": 0.08409388363361359,
+  "improved": true,
+  "chars": [
+    "A",
+    "B",
+    "C",
+    "O",
+    "X"
+  ]
+}
