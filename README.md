@@ -22,6 +22,19 @@ python scripts/run_all.py --quick   # 더 짧은 설정
 개별 시연: `python experiments/train_text_classify.py` (D1) ·
 `train_image_classify.py` (D2) · `demo_text_fill.py` (D3) · `demo_text_to_image.py` (D4).
 
+### 실험 기록 (exlog)
+
+매 실험을 데이터셋 스냅샷·학습 로그·결과 MD 와 함께 `exlog/<YYYYMMDD>_experiment_<No>/` 에 자동 정리:
+
+```bash
+python scripts/run_experiment.py                       # D1~D4 전체
+python scripts/run_experiment.py --demo D2 --note "..." # 특정 시연 + 메모
+python scripts/run_experiment.py --demo D1 D3 --quick   # 여러 개 + 짧은 설정
+```
+
+생성물: `datasets/`(사용 데이터 재구성 + `dataset.md`) · `results/`(그림·메트릭 + `report.md`) ·
+`README.md`(한 장 요약) · `experiment.json`. 디렉토리 번호는 자동 증가(비어 있는 최신 디렉토리는 재사용).
+
 ## 결과 (full `run_all`, CPU, 결정론적 시드)
 
 | # | 시연 | 기준 | reservoir → opened | 합격 |
