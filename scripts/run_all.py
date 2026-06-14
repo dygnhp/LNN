@@ -48,9 +48,9 @@ def main(quick=False):
                    d3=dict(n_total=160, epochs_res=3, epochs_open=8),
                    d4=dict(epochs_res=5, epochs_open=20))
     else:
-        cfg = dict(d1=dict(n_total=320, epochs_res=6, epochs_open=18),
+        cfg = dict(d1=dict(n_total=320, epochs_res=6, epochs_open=24),
                    d2=dict(n_per_class=30, epochs_res=6, epochs_open=18),
-                   d3=dict(n_total=320, epochs_res=5, epochs_open=18),
+                   d3=dict(n_total=320, epochs_res=5, epochs_open=20),
                    d4=dict(epochs_res=10, epochs_open=40))
 
     results = []

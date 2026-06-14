@@ -45,6 +45,10 @@ def build_labels(params, open_terrain: bool, open_gain: bool):
             return "frozen"
         if grp == "gain_a" and not open_gain:
             return "frozen"
+        # §4.3 결정 2: reservoir 단계에선 임베딩 고정, 지형 개방과 함께 학습
+        # (파형과 그 라우팅이 정합해야 하므로). decoder_head·diag_gain 은 readout 으로 항상 학습.
+        if grp == "embedding" and not open_terrain:
+            return "frozen"
         return grp
 
     return jax.tree_util.tree_map_with_path(label, params)

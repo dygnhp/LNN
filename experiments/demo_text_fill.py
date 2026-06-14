@@ -79,7 +79,7 @@ def run(seed=0, R=5, n_total=300, epochs_res=5, epochs_open=18, batch=32):
 
     model, _, win = train.run_phase(
         model, static, loss_fn, Xtr, ytr, epochs=epochs_open, batch_size=batch,
-        open_terrain=True, open_gain=True, lrs=None,
+        open_terrain=True, open_gain=False, lrs=dict(embedding=4e-2, terrain_h=2e-2),
         lam_schedule=train.const_lambda(8.0),
         recompute_windows=recompute_windows, seed=seed + 1, log_prefix="[open] ")
     acc_open = train.accuracy(_logits(model, geo, Xte, win), yte)

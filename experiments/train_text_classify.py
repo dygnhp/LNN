@@ -67,9 +67,11 @@ def run(seed=0, R=5, n_total=300, epochs_res=6, epochs_open=16, batch=32):
     acc_res = train.accuracy(_predict(model, geo, Xte, win), yte)
     print(f"    reservoir test acc = {acc_res:.3f}")
 
+    # §4.3 결정 2: 지형 개방과 함께 임베딩 학습. 임베딩 lr 을 높이고 지형 lr 은 완만히
+    # (joint 최적화에서 지형 섭동이 임베딩 학습을 흔드는 것 방지). gain 은 이 단계 미개방.
     model, _, win = train.run_phase(
         model, static, loss_fn, Xtr, ytr, epochs=epochs_open, batch_size=batch,
-        open_terrain=True, open_gain=True, lrs=None,
+        open_terrain=True, open_gain=False, lrs=dict(embedding=6e-2, terrain_h=2e-2),
         lam_schedule=train.const_lambda(8.0),
         recompute_windows=recompute_windows, seed=seed + 1, log_prefix="[open] ")
     logits_te = _predict(model, geo, Xte, win)

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lnn-aris"
+version = "0.1.0"
+description = "LNN / ARIS (Area-Routed Interference System) — Block I proof of concept"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "jax>=0.4.30",       # CPU 기본; GPU 불요 (§12 CPU 우선)
+    "optax>=0.2.0",
+    "equinox>=0.11,<0.12",
+    "numpy>=1.24",
+    "scikit-learn>=1.2",  # sklearn digits (D2)
+    "pillow>=9.0",        # 글자 비트맵 렌더 (D4)
+    "matplotlib>=3.6",    # 산출물 PNG
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["lnn*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
