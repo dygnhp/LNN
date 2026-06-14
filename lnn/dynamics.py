@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import NamedTuple
 
 import jax
@@ -41,8 +42,11 @@ class StepConstants(NamedTuple):
 
 
 def buffer_length(tau_max: float) -> int:
-    """변 버퍼 길이: 최대 지연을 담을 만큼 + 여유. (n_steps 와 무관 — 매 스텝 재삽입.)"""
-    return int(jnp.ceil(tau_max)) + 2
+    """변 버퍼 길이: 최대 지연을 담을 만큼 + 여유. (n_steps 와 무관 — 매 스텝 재삽입.)
+
+    tau_max 는 정적 Python float — math.ceil 로 호스트 계산(jit 트레이싱 무관).
+    """
+    return int(math.ceil(float(tau_max))) + 2
 
 
 def make_step_constants(geo: Geometry, tau, g_cell, L: int) -> StepConstants:
