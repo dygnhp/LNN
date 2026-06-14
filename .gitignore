@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+
+# JAX / cache
+.jax_cache/
+*.npz
+
+# Test / tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs (산출물은 재생성 가능 — 기본 제외, 필요 시 강제 추가)
+outputs/*.png
+outputs/*.json
+!outputs/.gitkeep
