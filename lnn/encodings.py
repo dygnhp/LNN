@@ -66,28 +66,54 @@ class ImageEncoder(eqx.Module):
 
 
 class FreqEncoder(eqx.Module):
-    """경로 A(OFDM식) — Block II 예약. Block I 에서는 인터페이스/직교성 테스트만.
+    """경로 A(OFDM식) — Block II 예약, Experiment 2 에서 D3 에만 시범 구현(경로 B 후반 당겨오기).
 
-    벡터 성분을 서로 다른 주파수의 진폭에 실어 합성 → 차원을 시간에서 분리(큰 D 확장의
-    유일한 길). 단일 매질 직교 주파수 수 한계 때문에 다중 Area 차원 분할과 반드시 결합.
+    벡터 성분을 **서로 다른 주파수의 진폭**에 실어 하나의 파형으로 합성(OFDM):
+        s(t) = Σ_{k=0}^{D-1} e_v[k]·sin(2π(k+1)t / W),  t∈[0,W)
+    차원이 시간축이 아니라 주파수축에 겹쳐 분산 채널을 통과해도 성분 보존. D개 직교
+    부반송파를 담으려면 심볼 길이 W ≥ 2D. 단일 운반 셀(carrier)에 합성 파형을 주입한다
+    (경로 B 가 D개 셀에 시간 분산하는 것과 대비). 토큰은 W 간격으로 순차 주입.
+
+    주의(정직성): Block I 의 readout 은 단일 wavelet 정합필터라 D 주파수 뱅크 분리를
+    완전히 수행하지 않는다(완전한 경로 A 는 출력단 주파수 정합필터 뱅크 + 다중 Area 차원
+    분할 = Block II). 본 시범은 "주파수 다중화 인코딩이 코드북 직교성 붕괴(§11★)를
+    완화하는가"를 측정하기 위한 것이다.
     """
 
     embedding: jax.Array
-    gen_cells: tuple = eqx.field(static=True)
+    gen_cells: tuple = eqx.field(static=True)   # 운반(carrier) 셀(들), 보통 1개
     P: int = eqx.field(static=True)
     n_steps: int = eqx.field(static=True)
     n_cells: int = eqx.field(static=True)
+    window: int = eqx.field(static=True)        # OFDM 심볼 길이 W (≥ 2D)
+    stride: int = eqx.field(static=True)        # 토큰 간 주입 간격
 
-    def encode(self, tokens_BS):  # pragma: no cover - Block II
-        raise NotImplementedError(
-            "FreqEncoder 는 Block II 예약(경로 A). Block I 은 TimeEncoder 사용. # TODO"
-        )
+    @property
+    def D(self):
+        return self.embedding.shape[1]
+
+    def _basis(self, D):
+        t = jnp.arange(self.window)
+        return jnp.stack([jnp.sin(2 * jnp.pi * (k + 1) * t / self.window) for k in range(D)])
+
+    def encode(self, tokens_BS):
+        """tokens:[B,S] → inject:[B, n_steps, N]. 토큰별 OFDM 파형을 운반 셀에 주입."""
+        emb = self.embedding[tokens_BS]                  # [B, S, D]
+        B, S, D = emb.shape
+        basis = self._basis(D)                           # [D, W]
+        inj = jnp.zeros((B, self.n_steps, self.n_cells), emb.dtype)
+        for p in range(S):
+            t0 = p * self.stride
+            if t0 + self.window > self.n_steps:
+                break
+            wave = jnp.einsum("bd,dw->bw", emb[:, p, :], basis)   # [B, W]
+            for cell in self.gen_cells:
+                inj = inj.at[:, t0:t0 + self.window, cell].add(wave)
+        return inj
 
     def channel_basis(self):
-        """주파수 채널 직교 기저(단위 테스트용). 주기 1..D 의 sin 파형 [D, P]."""
-        D = self.embedding.shape[1]
-        t = jnp.arange(self.P)
-        return jnp.stack([jnp.sin(2 * jnp.pi * (m + 1) * t / self.P) for m in range(D)])
+        """주파수 채널 직교 기저(단위 테스트용). 주기 1..D 의 sin 파형 [D, W]."""
+        return self._basis(self.embedding.shape[1])
 
 
 def channel_orthogonality(codes):
