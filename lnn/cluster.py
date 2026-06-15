@@ -59,17 +59,21 @@ class Cluster(eqx.Module):
 def _make_area(geo, key, role, gen_cells, out_cells, hp):
     """단일 Area 생성: 지형 RBF 중심/폭 고정, h 작은 난수, 이득 a=0(초기 G≈1)."""
     kh, kc = jax.random.split(key)
-    K = hp["n_hills"]
+    # 지형·이득 RBF 언덕 수를 독립 설정(Experiment 3 동반 스케일링). 미지정 시 n_hills.
+    K_t = hp.get("n_hills_terrain", hp["n_hills"])
+    K_g = hp.get("n_hills_gain", hp["n_hills"])
+    kc, kc2 = jax.random.split(kc)
     pos = np.asarray(geo.pos)
     lo, hi = pos.min(0), pos.max(0)
     # RBF 중심: 격자 범위에 결정론적으로 흩뿌림
-    cc = np.asarray(jax.random.uniform(kc, (K, 2)) ) * (hi - lo) + lo
+    cc = np.asarray(jax.random.uniform(kc, (K_t, 2))) * (hi - lo) + lo
     terrain_c = jnp.asarray(cc, jnp.float32)
-    terrain_sigma = jnp.full((K,), hp["sigma_t"], jnp.float32)
-    terrain_h = 0.1 * jax.random.normal(kh, (K,))
-    gain_d = jnp.asarray(cc, jnp.float32)              # 이득장 중심 = 지형 중심 재사용
-    gain_sigma = jnp.full((K,), hp["sigma_g"], jnp.float32)
-    gain_a = jnp.zeros((K,))
+    terrain_sigma = jnp.full((K_t,), hp["sigma_t"], jnp.float32)
+    terrain_h = 0.1 * jax.random.normal(kh, (K_t,))
+    cg = np.asarray(jax.random.uniform(kc2, (K_g, 2))) * (hi - lo) + lo
+    gain_d = jnp.asarray(cg, jnp.float32)
+    gain_sigma = jnp.full((K_g,), hp["sigma_g"], jnp.float32)
+    gain_a = jnp.zeros((K_g,))
     return Area(
         terrain_h=terrain_h,
         gain_a=gain_a,

@@ -129,3 +129,65 @@ def run_phase(model, static, loss_fn, X, Y, *, epochs, batch_size,
 
 def accuracy(logits, y):
     return float(np.mean(np.asarray(jnp.argmax(logits, axis=-1)) == np.asarray(y)))
+
+
+# ─────────────────────────── 자율 성장 학습 (Experiment 3) ───────────────────
+def run_growth_phase(model, static, loss_fn, X, Y, *, epochs, batch_size,
+                     open_terrain, open_gain, lrs, lam_schedule, recompute_windows,
+                     geo, gconf, grow_terrain=True, grow_gain=True, seed=0, log_prefix=""):
+    """plateau 감지 시 지형/이득 RBF 개수를 자율 성장시키는 학습 루프(§1.2).
+
+    파라미터 개수가 바뀌면 JAX 가 shape 변화로 자동 재컴파일하고, optax 모먼트는
+    성장 직후 재초기화한다(CHM `_build_state` 재호출 패턴). 코어 동역학은 불변.
+    반환: (model, history(epoch loss), growth_log).
+    """
+    from .growth import PlateauDetector, current_K, grow_model
+
+    rng = np.random.default_rng(seed)
+    gkey = jax.random.PRNGKey(seed + 777)
+    params, _ = eqx.partition(model, eqx.is_inexact_array)
+    opt, opt_state = make_optimizer(params, lrs, open_terrain, open_gain)
+    grad_fn = jax.jit(jax.value_and_grad(loss_fn, has_aux=True))
+    detector = PlateauDetector(gconf.plateau_window, gconf.plateau_threshold)
+
+    Xj, Yj = jnp.asarray(X), jnp.asarray(Y)
+    history, growth_log = [], []
+    last_grow = -10 ** 9
+    windows = recompute_windows(model)
+    for ep in range(epochs):
+        lam = float(lam_schedule(ep, epochs))
+        ep_loss, nb = 0.0, 0
+        for bi in _batches(len(X), batch_size, rng):
+            (lval, _aux), grads = grad_fn(params, Xj[bi], Yj[bi], windows, lam)
+            updates, opt_state = opt.update(grads, opt_state, params)
+            params = optax.apply_updates(params, updates)
+            ep_loss += float(lval)
+            nb += 1
+        model = eqx.combine(params, static)
+        ep_loss /= max(nb, 1)
+        history.append(ep_loss)
+        detector.update(ep_loss)
+        kt, kg = current_K(model)
+
+        cooldown_ok = (ep - last_grow) >= gconf.cooldown_after_grow
+        if ep >= gconf.min_epochs_before_grow and cooldown_ok and detector.is_plateau():
+            gt = gconf.K_terrain_grow if (grow_terrain and kt + gconf.K_terrain_grow <= gconf.K_terrain_max) else 0
+            gg = gconf.K_gain_grow if (grow_gain and kg + gconf.K_gain_grow <= gconf.K_gain_max) else 0
+            if gt > 0 or gg > 0:
+                gkey, sub = jax.random.split(gkey)
+                model = grow_model(model, gt, gg, geo, sub)
+                params, static = eqx.partition(model, eqx.is_inexact_array)
+                opt, opt_state = make_optimizer(params, lrs, open_terrain, open_gain)  # 모먼트 재초기화
+                detector.reset()
+                last_grow = ep
+                windows = recompute_windows(model)
+                nkt, nkg = current_K(model)
+                growth_log.append(dict(epoch=ep, event="grow_K", loss=ep_loss,
+                                       K_terrain=nkt, K_gain=nkg))
+                print(f"    {log_prefix}ep{ep:02d} >>> grow_K  K_terrain {kt}->{nkt} "
+                      f"K_gain {kg}->{nkg}  (loss={ep_loss:.4f})")
+                continue
+        if ep == 0 or ep == epochs - 1:
+            print(f"    {log_prefix}ep{ep:02d} loss={ep_loss:.4f} K_t={kt} K_g={kg} lam={lam:.2f}")
+
+    return model, history, growth_log

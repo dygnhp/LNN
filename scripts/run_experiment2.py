@@ -122,6 +122,10 @@ _FD_SNIPPET = (
 def train_image_stage(stage, seed=0):
     geo = C.make_geometry(stage["R"])
     hp = {**C.classify_hp(), "n_steps": stage["n_steps"], "n_proc": 1}
+    if "K_terrain" in stage:   # Experiment 3 동반 스케일링: 지형/이득 RBF 수 지정
+        hp["n_hills_terrain"] = stage["K_terrain"]
+    if "K_gain" in stage:
+        hp["n_hills_gain"] = stage["K_gain"]
     Xtr, ytr, Xte, yte, src = load_mnist_split(
         n_per_class=stage["per_class"], size=stage["size"],
         test_per_class=max(10, stage["per_class"] // 3), seed=seed)
