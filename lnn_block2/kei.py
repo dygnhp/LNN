@@ -33,6 +33,38 @@ class KEIImage(eqx.Module):
         return self.multi.make_windows(geo)
 
 
+class KEIImageRP(eqx.Module):
+    """Phase 2 이미지 분류 — RPPulseCoupling(펄스 수준 공유) + head. IP/RP 는 coupling 으로."""
+
+    encoder: object
+    rp: object                 # RPPulseCoupling
+    head: object
+
+    def forward(self, geo, X, windows):
+        u = self.rp.run(geo, self.encoder.encode(X), windows)   # [B, M·C]
+        return jax.vmap(self.head)(u)
+
+    def make_windows(self, geo):
+        return self.rp.make_windows(geo)
+
+
+def build_rp_image(geo, pix_cells, feat_cells, n_areas, coupling, n_classes, key, hp):
+    """KEIImageRP 조립(펄스 공유 다중 Area). 처리 Area: gen=pixel, out=feature(C, 공유)."""
+    from lnn.cluster import _make_area
+    from lnn.encodings import ImageEncoder
+    from .rp_pulse_coupling import RPPulseCoupling
+
+    ka, kh = jax.random.split(key)
+    keys = jax.random.split(ka, n_areas)
+    areas = tuple(_make_area(geo, keys[i], "processor", pix_cells, feat_cells, hp)
+                  for i in range(n_areas))
+    rp = RPPulseCoupling(areas=areas, coupling=coupling, shared_clock=True,
+                         out_cells=tuple(int(x) for x in feat_cells), P=hp["P"])
+    enc = ImageEncoder(gen_cells=pix_cells, P=hp["P"], n_steps=hp["n_steps"], n_cells=geo.N)
+    head = eqx.nn.Linear(n_areas * len(feat_cells), n_classes, key=kh)
+    return KEIImageRP(encoder=enc, rp=rp, head=head)
+
+
 def build_kei_image(geo, pix_cells, feat_cells, n_areas, mode, coupling, epsilon,
                     n_classes, key, hp):
     """KEIImage 조립. 각 처리 Area: gen=pixel, out=feature(C). head: n_areas·C → classes."""
