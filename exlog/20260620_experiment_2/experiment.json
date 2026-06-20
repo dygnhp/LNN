@@ -1,0 +1,75 @@
+{
+  "no": 2,
+  "date": "20260620",
+  "quick": false,
+  "git_commit": "0f776b8",
+  "frozen_interface_ok": true,
+  "elapsed_sec": 297.2,
+  "verdicts": {
+    "C1": true,
+    "C2": false,
+    "C3": true,
+    "best_acc_mnist": 0.38
+  },
+  "e_cell": {
+    "exp": "E-CELL",
+    "rows": [
+      {
+        "R": 5,
+        "n_cells": 91,
+        "K": 8,
+        "n_steps": 70,
+        "acc_mnist": 0.33,
+        "acc_res": 0.18,
+        "path_diversity": 0.705,
+        "stability": 0.0,
+        "top1": 0.325,
+        "within": 0.415,
+        "across": 0.27,
+        "fwd_sec": 0.0247,
+        "flops_xla": 3439202.0,
+        "flops_analytic": 22666392,
+        "params": 182
+      },
+      {
+        "R": 8,
+        "n_cells": 217,
+        "K": 20,
+        "n_steps": 94,
+        "acc_mnist": 0.38,
+        "acc_res": 0.18,
+        "path_diversity": 1.407,
+        "stability": 0.0,
+        "top1": 0.3,
+        "within": 0.6,
+        "across": 0.532,
+        "fwd_sec": 0.0766,
+        "flops_xla": 7353344.0,
+        "flops_analytic": 71377416,
+        "params": 236
+      },
+      {
+        "R": 12,
+        "n_cells": 469,
+        "K": 42,
+        "n_steps": 126,
+        "acc_mnist": 0.35,
+        "acc_res": 0.1,
+        "path_diversity": 2.014,
+        "stability": 0.0,
+        "top1": 0.175,
+        "within": 0.346,
+        "across": 0.352,
+        "fwd_sec": 0.2345,
+        "flops_xla": 17734608.0,
+        "flops_analytic": 205423848,
+        "params": 335
+      }
+    ],
+    "Rs": [
+      5,
+      8,
+      12
+    ]
+  }
+}
