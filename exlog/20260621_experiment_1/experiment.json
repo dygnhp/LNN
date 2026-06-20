@@ -1,0 +1,92 @@
+{
+  "no": 1,
+  "date": "20260621",
+  "quick": false,
+  "git_commit": "e48ebbc",
+  "frozen_interface_ok": true,
+  "elapsed_sec": 266.8,
+  "verdicts": {
+    "G1": false,
+    "G2": true,
+    "G3": true,
+    "best_acc": 0.415,
+    "g5": "C>A (공유 순환이 더 나음)"
+  },
+  "e_depth": {
+    "exp": "E-DEPTH",
+    "depths": [
+      1,
+      2,
+      4,
+      6
+    ],
+    "A": [
+      {
+        "method": "A",
+        "depth": 1,
+        "acc": 0.17,
+        "residual": 0.2327,
+        "params": 154,
+        "train_sec": 11.9
+      },
+      {
+        "method": "A",
+        "depth": 2,
+        "acc": 0.245,
+        "residual": 0.5852,
+        "params": 178,
+        "train_sec": 16.1
+      },
+      {
+        "method": "A",
+        "depth": 4,
+        "acc": 0.3,
+        "residual": 1.0631,
+        "params": 226,
+        "train_sec": 25.3
+      },
+      {
+        "method": "A",
+        "depth": 6,
+        "acc": 0.24,
+        "residual": 1.7595,
+        "params": 274,
+        "train_sec": 35.0
+      }
+    ],
+    "C": [
+      {
+        "method": "C",
+        "depth": 1,
+        "acc": 0.4,
+        "params": 106,
+        "loop_growth": 1.0,
+        "train_sec": 4.5
+      },
+      {
+        "method": "C",
+        "depth": 2,
+        "acc": 0.405,
+        "params": 106,
+        "loop_growth": 0.904,
+        "train_sec": 7.6
+      },
+      {
+        "method": "C",
+        "depth": 4,
+        "acc": 0.415,
+        "params": 106,
+        "loop_growth": 0.795,
+        "train_sec": 14.2
+      },
+      {
+        "method": "C",
+        "depth": 6,
+        "acc": 0.39,
+        "params": 106,
+        "loop_growth": 0.726,
+        "train_sec": 21.1
+      }
+    ]
+  }
+}
