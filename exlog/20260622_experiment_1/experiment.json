@@ -1,0 +1,78 @@
+{
+  "no": 1,
+  "date": "20260622",
+  "quick": false,
+  "git_commit": "5db06bb",
+  "frozen_interface_ok": true,
+  "elapsed_sec": 177.7,
+  "locus": "지연기질(다)·7번째 확증",
+  "experiment_I": {
+    "exp": "E-BUDGET",
+    "rows": [
+      {
+        "epoch_mult": 1,
+        "e_open": 6,
+        "acc": 0.36,
+        "converged": false,
+        "conv_epoch": null,
+        "final_loss": 1.997
+      },
+      {
+        "epoch_mult": 3,
+        "e_open": 18,
+        "acc": 0.43333333333333335,
+        "converged": false,
+        "conv_epoch": null,
+        "final_loss": 1.5903
+      },
+      {
+        "epoch_mult": 5,
+        "e_open": 30,
+        "acc": 0.49333333333333335,
+        "converged": false,
+        "conv_epoch": null,
+        "final_loss": 1.4897
+      }
+    ],
+    "best": 0.49333333333333335,
+    "broke": false,
+    "basin": []
+  },
+  "experiment_II": {
+    "exp": "E-INTERIOR",
+    "rows": [
+      {
+        "density": "none",
+        "kind": "signed_relu",
+        "acc": 0.53,
+        "residual": 0.0,
+        "n_nonlin_nodes": 0,
+        "dc_drift": 0.0
+      },
+      {
+        "density": "sparse",
+        "kind": "signed_relu",
+        "acc": 0.5166666666666667,
+        "residual": 0.0777,
+        "n_nonlin_nodes": 15,
+        "dc_drift": 0.0
+      },
+      {
+        "density": "dense",
+        "kind": "signed_relu",
+        "acc": 0.5166666666666667,
+        "residual": 18.6662,
+        "n_nonlin_nodes": 22,
+        "dc_drift": 0.0
+      },
+      {
+        "density": "dense",
+        "kind": "relu",
+        "acc": 0.5233333333333333,
+        "residual": 4.0599,
+        "n_nonlin_nodes": 22,
+        "dc_drift": 0.4639
+      }
+    ]
+  }
+}
