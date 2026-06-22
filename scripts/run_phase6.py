@@ -41,10 +41,11 @@ def main(quick=False):
     t0 = time.time()
     frozen_ok = frozen_gate()
 
+    no_basin = "--nobasin" in sys.argv   # I3 basin(×3 중복 최대-epoch) 생략 — 본 epoch 설정 유지
     import e_budget
     print("\n##### 실험 I — 최적화 충분성 (E-BUDGET) #####")
     EB = e_budget.run(per_class=(20 if quick else 40), base_open=(4 if quick else 6),
-                      mults=(1, 3) if quick else (1, 3, 5), do_basin=not quick)
+                      mults=(1, 3) if quick else (1, 3, 5), do_basin=(not quick) and (not no_basin))
     EI = None
     if not EB["broke"]:
         import e_interior
