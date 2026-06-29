@@ -1,0 +1,37 @@
+{
+  "no": 1,
+  "date": "20260629",
+  "quick": false,
+  "git_commit": "15f1252",
+  "frozen_interface_ok": true,
+  "elapsed_sec": 65.0,
+  "F1": {
+    "static_top1": 0.18333333333333332,
+    "cross_top1": 0.31666666666666665,
+    "improved": true
+  },
+  "bank": [
+    {
+      "M": 1,
+      "acc": 0.42333333333333334,
+      "u_outside": 0.0
+    },
+    {
+      "M": 4,
+      "acc": 0.44333333333333336,
+      "u_outside": 0.802
+    },
+    {
+      "M": 8,
+      "acc": 0.45,
+      "u_outside": 0.9
+    }
+  ],
+  "best_bank": {
+    "M": 8,
+    "acc": 0.45,
+    "u_outside": 0.9
+  },
+  "F1_improved": true,
+  "F6_broke": false
+}
