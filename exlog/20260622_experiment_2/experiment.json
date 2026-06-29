@@ -1,0 +1,98 @@
+{
+  "no": 2,
+  "date": "20260622",
+  "rows": [
+    {
+      "cell": "off(R5)",
+      "R": 5,
+      "ral": false,
+      "mult": 5,
+      "e_open": 30,
+      "acc": 0.285,
+      "n_cells": 91,
+      "K": 8
+    },
+    {
+      "cell": "off(R5)",
+      "R": 5,
+      "ral": false,
+      "mult": 10,
+      "e_open": 60,
+      "acc": 0.385,
+      "n_cells": 91,
+      "K": 8
+    },
+    {
+      "cell": "off(R5)",
+      "R": 5,
+      "ral": true,
+      "mult": 5,
+      "e_open": 30,
+      "acc": 0.42,
+      "n_cells": 91,
+      "K": 8
+    },
+    {
+      "cell": "off(R5)",
+      "R": 5,
+      "ral": true,
+      "mult": 10,
+      "e_open": 60,
+      "acc": 0.44,
+      "n_cells": 91,
+      "K": 8
+    },
+    {
+      "cell": "on(R8)",
+      "R": 8,
+      "ral": false,
+      "mult": 5,
+      "e_open": 30,
+      "acc": 0.29,
+      "n_cells": 217,
+      "K": 20
+    },
+    {
+      "cell": "on(R8)",
+      "R": 8,
+      "ral": false,
+      "mult": 10,
+      "e_open": 60,
+      "acc": 0.325,
+      "n_cells": 217,
+      "K": 20
+    },
+    {
+      "cell": "on(R8)",
+      "R": 8,
+      "ral": true,
+      "mult": 5,
+      "e_open": 30,
+      "acc": 0.34,
+      "n_cells": 217,
+      "K": 20
+    },
+    {
+      "cell": "on(R8)",
+      "R": 8,
+      "ral": true,
+      "mult": 10,
+      "e_open": 60,
+      "acc": 0.37,
+      "n_cells": 217,
+      "K": 20
+    }
+  ],
+  "best": {
+    "cell": "off(R5)",
+    "R": 5,
+    "ral": true,
+    "mult": 10,
+    "e_open": 60,
+    "acc": 0.44,
+    "n_cells": 91,
+    "K": 8
+  },
+  "ceiling": 0.56,
+  "note": "per_class=12; compare within grid"
+}
