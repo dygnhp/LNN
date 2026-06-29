@@ -28,6 +28,8 @@ _GROUP_OF_FIELD = {
     "diag_gains": "diag_gain",
     "weight": "decoder_head",
     "bias": "decoder_head",
+    "W": "decoder_code",        # Phase 7 동적 Query/뱅크 사상 (readout 파라미터)
+    "templates": "decoder_code",
 }
 
 DEFAULT_LRS = dict(terrain_h=5e-2, gain_a=2e-2, embedding=2e-2,
@@ -63,6 +65,7 @@ def make_optimizer(params, lrs, open_terrain, open_gain):
         "gain_a": optax.adam(lrs["gain_a"]),
         "embedding": optax.adam(lrs["embedding"]),
         "decoder_head": optax.adam(lrs["decoder_head"]),
+        "decoder_code": optax.adam(lrs.get("decoder_code", lrs["decoder_head"])),
         "diag_gain": optax.adam(lrs["diag_gain"]),
         "frozen": optax.set_to_zero(),
     }
